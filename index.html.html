@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NST Learning Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fffe;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #4a90e2, #2ecc71);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-role {
+            background-color: rgba(255,255,255,0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem 0;
+            min-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Home Section */
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+            background: linear-gradient(135deg, #e3f2fd, #e8f5e8);
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4a90e2, #357abd);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4a90e2;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            margin-top: 0.5rem;
+        }
+
+        /* Upload Section */
+        .upload-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-upload-btn {
+            background: #f8f9fa;
+            border: 2px dashed #4a90e2;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload-btn:hover {
+            background: #e3f2fd;
+        }
+
+        .file-name {
+            margin-top: 1rem;
+            font-weight: 600;
+            color: #27ae60;
+        }
+
+        /* Browse Section */
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .search-input {
+            position: relative;
+        }
+
+        .search-input input {
+            padding-left: 2.5rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .resource-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .resource-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .resource-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-meta {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .resource-description {
+            color: #555;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .resource-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .resource-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-download {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-preview {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-small:hover {
+            opacity: 0.8;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .close {
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        /* User Switch */
+        .user-switch {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem;
+            border-radius: 20px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">🎓 NST Learning Hub</div>
+                <nav>
+                    <ul>
+                        <li><a href="#" onclick="showSection('home')" class="nav-link active">Home</a></li>
+                        <li><a href="#" onclick="showSection('upload')" class="nav-link" id="upload-nav">Upload</a></li>
+                        <li><a href="#" onclick="showSection('browse')" class="nav-link">Browse</a></li>
+                        <li><a href="#" onclick="showSection('about')" class="nav-link">About</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="user-role" id="user-role">Teacher</span>
+                    <button class="user-switch" onclick="toggleUserRole()">Switch to Student</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <h1>Welcome to NST Learning Hub</h1>
+                <p>A centralized platform for Natural Science, Technology, and NST materials for Grades 4-9</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" onclick="showSection('upload')" id="upload-btn">📤 Upload Materials</button>
+                    <button class="btn btn-secondary" onclick="showSection('browse')">📚 Browse Resources</button>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-resources">42</div>
+                    <div class="stat-label">Total Resources</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="total-downloads">1,234</div>
+                    <div class="stat-label">Downloads</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="active-teachers">8</div>
+                    <div class="stat-label">Active Teachers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="active-students">156</div>
+                    <div class="stat-label">Students</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upload Section -->
+        <section id="upload" class="section">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Upload Learning Material</h2>
+            <div class="upload-form">
+                <div class="success-message" id="success-message">
+                    ✅ File uploaded successfully!
+                </div>
+                <form id="upload-form">
+                    <div class="form-group">
+                        <label for="grade">Grade *</label>
+                        <select id="grade" name="grade" required>
+                            <option value="">Select Grade</option>
+                            <option value="4">Grade 4</option>
+                            <option value="5">Grade 5</option>
+                            <option value="6">Grade 6</option>
+                            <option value="7">Grade 7</option>
+                            <option value="8">Grade 8</option>
+                            <option value="9">Grade 9</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject *</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Select Subject</option>
+                            <option value="Natural Science">Natural Science</option>
+                            <option value="Technology">Technology</option>
+                            <option value="NST">Natural Science & Technology</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="title">Topic Title *</label>
+                        <input type="text" id="title" name="title" placeholder="Enter topic title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="4" placeholder="Brief description of the material..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="file">Upload File *</label>
+                        <div class="file-upload">
+                            <input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.ppt,.pptx" required>
+                            <div class="file-upload-btn">
+                                📁 Choose File (PDF, Word, PowerPoint)
+                                <div class="file-name" id="file-name"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Upload Material</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Browse Section -->
+        <section id="browse" class="section">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Browse Learning Materials</h2>
+            
+            <div class="filters">
+                <div class="filter-row">
+                    <div class="form-group">
+                        <label for="filter-grade">Filter by Grade</label>
+                        <select id="filter-grade" onchange="filterResources()">
+                            <option value="">All Grades</option>
+                            <option value="4">Grade 4</option>
+                            <option value="5">Grade 5</option>
+                            <option value="6">Grade 6</option>
+                            <option value="7">Grade 7</option>
+                            <option value="8">Grade 8</option>
+                            <option value="9">Grade 9</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="filter-subject">Filter by Subject</label>
+                        <select id="filter-subject" onchange="filterResources()">
+                            <option value="">All Subjects</option>
+                            <option value="Natural Science">Natural Science</option>
+                            <option value="Technology">Technology</option>
+                            <option value="NST">Natural Science & Technology</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group search-input">
+                        <label for="search">Search</label>
+                        <input type="text" id="search" placeholder="Search by title or keywords..." oninput="filterResources()">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resources-grid" id="resources-grid">
+                <!-- Resources will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section">
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <h2 style="margin-bottom: 2rem; color: #2c3e50;">About NST Learning Hub</h2>
+                <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                    <p style="font-size: 1.2rem; margin-bottom: 1.5rem; color: #555;">
+                        NST Learning Hub is a comprehensive educational platform designed specifically for Grades 4-9 Natural Science, Technology, and NST subjects.
+                    </p>
+                    <p style="margin-bottom: 1.5rem; color: #666;">
+                        Our mission is to provide educators and students with a centralized, easy-to-use platform for sharing and accessing high-quality learning materials. Whether you're a teacher looking to share resources or a student seeking study materials, NST Learning Hub makes it simple and efficient.
+                    </p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                        <div style="text-align: center;">
+                            <h3 style="color: #4a90e2; margin-bottom: 1rem;">📚 Centralized Resources</h3>
+                            <p style="color: #666;">All your NST materials in one organized location</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <h3 style="color: #2ecc71; margin-bottom: 1rem;">🤝 Easy Collaboration</h3>
+                            <p style="color: #666;">Teachers and students working together seamlessly</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <h3 style="color: #f39c12; margin-bottom: 1rem;">📱 Device Friendly</h3>
+                            <p style="color: #666;">Access materials from any device, anywhere</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="preview-title">Resource Preview</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="preview-content">
+                <p>This is a preview of the selected resource. In a real implementation, this would show the actual document content or a preview image.</p>
+                <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; text-align: center; margin: 1rem 0;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">📄</div>
+                    <p><strong id="preview-resource-title">Document Title</strong></p>
+                    <p id="preview-resource-meta">Grade • Subject • Date</p>
+                    <p id="preview-resource-description">Document description would appear here...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data
+        let resources = [
+            {
+                id: 1,
+                title: "Introduction to Photosynthesis",
+                subject: "Natural Science",
+                grade: "6",
+                description: "Understanding how plants make their own food through photosynthesis process.",
+                uploadDate: "2024-10-20",
+                downloads: 45,
+                fileType: "PDF"
+            },
+            {
+                id: 2,
+                title: "Simple Machines and Levers",
+                subject: "Technology",
+                grade: "5",
+                description: "Exploring different types of simple machines and their applications in daily life.",
+                uploadDate: "2024-10-18",
+                downloads: 32,
+                fileType: "PowerPoint"
+            },
+            {
+                id: 3,
+                title: "Water Cycle and Weather Patterns",
+                subject: "Natural Science",
+                grade: "4",
+                description: "Comprehensive study of water cycle and how it affects weather patterns.",
+                uploadDate: "2024-10-15",
+                downloads: 67,
+                fileType: "PDF"
+            },
+            {
+                id: 4,
+                title: "Electrical Circuits Basics",
+                subject: "NST",
+                grade: "7",
+                description: "Introduction to basic electrical circuits, components, and safety measures.",
+                uploadDate: "2024-10-12",
+                downloads: 28,
+                fileType: "Word"
+            },
+            {
+                id: 5,
+                title: "Solar System Exploration",
+                subject: "Natural Science",
+                grade: "8",
+                description: "Journey through our solar system, planets, and space exploration.",
+                uploadDate: "2024-10-10",
+                downloads: 89,
+                fileType: "PDF"
+            },
+            {
+                id: 6,
+                title: "Robotics for Beginners",
+                subject: "Technology",
+                grade: "9",
+                description: "Introduction to robotics, programming basics, and simple robot construction.",
+                uploadDate: "2024-10-08",
+                downloads: 41,
+                fileType: "PowerPoint"
+            }
+        ];
+
+        let currentUser = 'teacher';
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Load resources when browsing
+            if (sectionId === 'browse') {
+                displayResources(resources);
+            }
+        }
+
+        // User role toggle
+        function toggleUserRole() {
+            const userRoleElement = document.getElementById('user-role');
+            const switchButton = document.querySelector('.user-switch');
+            const uploadNav = document.getElementById('upload-nav');
+            const uploadBtn = document.getElementById('upload-btn');
+            
+            if (currentUser === 'teacher') {
+                currentUser = 'student';
+                userRoleElement.textContent = 'Student';
+                switchButton.textContent = 'Switch to Teacher';
+                uploadNav.style.display = 'none';
+                uploadBtn.style.display = 'none';
+            } else {
+                currentUser = 'teacher';
+                userRoleElement.textContent = 'Teacher';
+                switchButton.textContent = 'Switch to Student';
+                uploadNav.style.display = 'block';
+                uploadBtn.style.display = 'inline-block';
+            }
+        }
+
+        // File upload handling
+        document.getElementById('file').addEventListener('change', function(e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : '';
+            document.getElementById('file-name').textContent = fileName ? `Selected: ${fileName}` : '';
+        });
+
+        // Upload form submission
+        document.getElementById('upload-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const newResource = {
+                id: resources.length + 1,
+                title: formData.get('title'),
+                subject: formData.get('subject'),
+                grade: formData.get('grade'),
+                description: formData.get('description') || 'No description provided',
+                uploadDate: new Date().toISOString().split('T')[0],
+                downloads: 0,
+                fileType: 'PDF' // Simplified for demo
+            };
+            
+            resources.push(newResource);
+            
+            // Show success message
+            document.getElementById('success-message').style.display = 'block';
+            
+            // Reset form
+            e.target.reset();
+            document.getElementById('file-name').textContent = '';
+            
+            // Update stats
+            document.getElementById('total-resources').textContent = resources.length;
+            
+            // Hide success message after 3 seconds
+            setTimeout(() => {
+                document.getElementById('success-message').style.display = 'none';
+            }, 3000);
+        });
+
+        // Display resources
+        function displayResources(resourcesToShow) {
+            const grid = document.getElementById('resources-grid');
+            grid.innerHTML = '';
+            
+            if (resourcesToShow.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #7f8c8d;">No resources found matching your criteria.</div>';
+                return;
+            }
+            
+            resourcesToShow.forEach(resource => {
+                const card = document.createElement('div');
+                card.className = 'resource-card';
+                card.innerHTML = `
+                    <div class="resource-header">
+                        <div>
+                            <div class="resource-title">${resource.title}</div>
+                            <div class="resource-meta">Grade ${resource.grade} • ${resource.subject}</div>
+                        </div>
+                        <div style="font-size: 1.5rem;">${getFileIcon(resource.fileType)}</div>
+                    </div>
+                    <div class="resource-description">${resource.description}</div>
+                    <div class="resource-tags">
+                        <span class="tag">Grade ${resource.grade}</span>
+                        <span class="tag">${resource.subject}</span>
+                        <span class="tag">${resource.downloads} downloads</span>
+                    </div>
+                    <div class="resource-actions">
+                        <button class="btn-small btn-preview" onclick="previewResource(${resource.id})">👁️ Preview</button>
+                        <button class="btn-small btn-download" onclick="downloadResource(${resource.id})">⬇️ Download</button>
+                    </div>
+                    <div style="margin-top: 1rem; font-size: 0.8rem; color: #bdc3c7;">
+                        Uploaded: ${formatDate(resource.uploadDate)}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter resources
+        function filterResources() {
+            const gradeFilter = document.getElementById('filter-grade').value;
+            const subjectFilter = document.getElementById('filter-subject').value;
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            
+            let filtered = resources.filter(resource => {
+                const matchesGrade = !gradeFilter || resource.grade === gradeFilter;
+                const matchesSubject = !subjectFilter || resource.subject === subjectFilter;
+                const matchesSearch = !searchTerm || 
+                    resource.title.toLowerCase().includes(searchTerm) ||
+                    resource.description.toLowerCase().includes(searchTerm);
+                
+                return matchesGrade && matchesSubject && matchesSearch;
+            });
+            
+            displayResources(filtered);
+        }
+
+        // Preview resource
+        function previewResource(resourceId) {
+            const resource = resources.find(r => r.id === resourceId);
+            if (!resource) return;
+            
+            document.getElementById('preview-title').textContent = 'Resource Preview';
+            document.getElementById('preview-resource-title').textContent = resource.title;
+            document.getElementById('preview-resource-meta').textContent = `Grade ${resource.grade} • ${resource.subject} • ${formatDate(resource.uploadDate)}`;
+            document.getElementById('preview-resource-description').textContent = resource.description;
+            
+            document.getElementById('preview-modal').style.display = 'block';
+        }
+
+        // Download resource
+        function downloadResource(resourceId) {
+            const resource = resources.find(r => r.id === resourceId);
+            if (!resource) return;
+            
+            // Simulate download
+            alert(`Downloading: ${resource.title}`);
+            resource.downloads++;
+            
+            // Update display
+            displayResources(getFilteredResources());
+            
+            // Update total downloads stat
+            const totalDownloads = resources.reduce((sum, r) => sum + r.downloads, 0);
+            document.getElementById('total-downloads').textContent = totalDownloads.toLocaleString();
+        }
+
+        // Get currently filtered resources
+        function getFilteredResources() {
+            const gradeFilter = document.getElementById('filter-grade').value;
+            const subjectFilter = document.getElementById('filter-subject').value;
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            
+            return resources.filter(resource => {
+                const matchesGrade = !gradeFilter || resource.grade === gradeFilter;
+                const matchesSubject = !subjectFilter || resource.subject === subjectFilter;
+                const matchesSearch = !searchTerm || 
+                    resource.title.toLowerCase().includes(searchTerm) ||
+                    resource.description.toLowerCase().includes(searchTerm);
+                
+                return matchesGrade && matchesSubject && matchesSearch;
+            });
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('preview-modal').style.display = 'none';
+        }
+
+        // Helper functions
+        function getFileIcon(fileType) {
+            switch (fileType) {
+                case 'PDF': return '📄';
+                case 'Word': return '📝';
+                case 'PowerPoint': return '📊';
+                default: return '📁';
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('preview-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            displayResources(resources);
+            
+            // Calculate and display initial stats
+            const totalDownloads = resources.reduce((sum, r) => sum + r.downloads, 0);
+            document.getElementById('total-downloads').textContent = totalDownloads.toLocaleString();
+            document.getElementById('total-resources').textContent = resources.length;
+        });
+    </script>
+</body>
+</html>
